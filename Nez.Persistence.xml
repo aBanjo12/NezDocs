@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Nez.Persistence</name>
+  </assembly>
+  <members>
+    <member name="M:Nez.Persistence.Binary.FileDataStore.#ctor(System.String,FileFormat)">
+      <summary>
+   Initializes a new instance of the <see cref="T:Nez.Persistence.Binary.FileDataStore" /> class. If <paramref name="persistentDataPath" />
+   is null, it will use Utils.GetStorageRoot().
+   </summary>
+      <param name="persistentDataPath">Persistent data path.</param>
+      <param name="fileFormat">File format.</param>
+    </member>
+    <member name="T:Nez.Persistence.Binary.KeyValueDataStore">
+      <summary>
+   simple storage of some basic types. This is designed for small amounts of data such as preferences.
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.Binary.KeyValueDataStore.Default">
+      <summary>
+   default instance of the data store for easy access
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.Binary.KeyValueDataStore.#ctor(System.String)">
+      <summary>
+   creates a KeyValueDataStore that will persist and load from <paramref name="filename" />. Note that you must
+   manually call Load to do the initial data loading.
+   </summary>
+      <param name="filename">Filename.</param>
+    </member>
+    <member name="M:Nez.Persistence.Binary.KeyValueDataStore.Flush(FileDataStore)">
+      <summary>
+   flushes the data to disk
+   </summary>
+      <param name="dataStore">Data store.</param>
+    </member>
+    <member name="M:Nez.Persistence.Binary.KeyValueDataStore.Load(FileDataStore)">
+      <summary>
+   restores the data from disk if it is available
+   </summary>
+      <param name="dataStore">Data store.</param>
+    </member>
+    <member name="M:Nez.Persistence.IJsonEncoder.EncodeKeyValuePair(System.String,System.Object)">
+      <summary>
+   writes a key/value pair. <paramref name="value" /> can any JSON encodeable value.
+   </summary>
+      <param name="key">Key.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="T:Nez.Persistence.JsonObjectFactory`1">
+      <summary>
+   used to override the default JSON object creation for a Type.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.JsonTypeConverter">
+      <summary>
+   used to override the default JSON writing and augment converting JSON to an object
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.JsonTypeConverter`1">
+      <summary>
+   These can be used to fully override the reading and writing of JSON for any object type.
+   </summary>
+    </member>
+    <member name="P:Nez.Persistence.JsonTypeConverter.WantsExclusiveWrite">
+      <summary>
+   indicates this converter wants to exclusively write the JSON data. The props/fields will
+   not be encoded.
+   </summary>
+      <value>
+        <c>true</c> if wants exclusive write; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:Nez.Persistence.JsonTypeConverter.CanWrite">
+      <summary>
+   indicates this converter wants to write JSON. Both WantsExclusiveWrite and CanWrite need to be true
+   if this convertoer wants to write the JSON exclusively.
+   </summary>
+      <value>
+        <c>true</c> if can write; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:Nez.Persistence.JsonTypeConverter.CanRead">
+      <summary>
+   indicates this converter wants to read JSON. <see cref="M:Nez.Persistence.JsonTypeConverter.OnFoundCustomData(System.Object,System.String,System.Object)" /> will be called for each
+   key found that does not have a corresponding member field/property. This is the data that would have
+   been writtn in the <see cref="M:Nez.Persistence.JsonTypeConverter.WriteJson(IJsonEncoder,System.Object)" /> method.
+   </summary>
+      <value>
+        <c>true</c> if can read; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="M:Nez.Persistence.JsonTypeConverter.CanConvertType(Type)">
+      <summary>
+   indicates this converter can work with Type <paramref name="objectType" /></summary>
+      <returns>
+        <c>true</c>, if convert type was caned, <c>false</c> otherwise.</returns>
+      <param name="objectType">Object type.</param>
+    </member>
+    <member name="M:Nez.Persistence.JsonTypeConverter`1.WriteJson(IJsonEncoder,`0)">
+      <summary>
+   if CanWrite returns true this will be called. Here is where you encode your object using the <paramref name="encoder" /></summary>
+      <param name="encoder">Encoder.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="M:Nez.Persistence.JsonTypeConverter`1.OnFoundCustomData(`0,System.String,System.Object)">
+      <summary>
+   If CanConvert returns true this will be called anytime a key/value pair that isnt found via
+   reflection is in the JSON
+   </summary>
+      <returns>The to object.</returns>
+      <param name="instance">Instance.</param>
+      <param name="key">Key.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="T:Nez.Persistence.JsonIncludeAttribute">
+      <summary>
+   Mark members that should be included. Public fields and properties are included by default.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.JsonExcludeAttribute">
+      <summary>
+   Mark members that should not be included.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.BeforeEncodeAttribute">
+      <summary>
+   Mark methods to be called before an object is encoded.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.AfterDecodeAttribute">
+      <summary>
+   Mark methods to be called after an object is decoded.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.DecodeAliasAttribute">
+      <summary>
+   Provide field and property aliases when an object is decoded.
+   If a field or property is not found while decoding, this list will be searched for a matching alias.
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.Json.ToJson(System.Object,System.Boolean)">
+      <summary>
+   encodes <paramref name="obj" /> to a json string, pretty printed
+   </summary>
+      <returns>The json.</returns>
+      <param name="obj">Object.</param>
+      <param name="prettyPrint">If set to <c>true</c> pretty print.</param>
+    </member>
+    <member name="M:Nez.Persistence.Json.ToJson(System.Object,JsonTypeConverter[])">
+      <summary>
+   encodes <paramref name="obj" /> to a json string with an optional <see cref="T:Nez.Persistence.JsonTypeConverter" /></summary>
+      <returns>The json.</returns>
+      <param name="obj">Object.</param>
+      <param name="converters">Converters.</param>
+    </member>
+    <member name="M:Nez.Persistence.Json.ToJson(System.Object,JsonSettings)">
+      <summary>
+   encodes <paramref name="obj" /> to a json string
+   </summary>
+      <param name="obj">
+      </param>
+      <param name="options">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.Persistence.Json.FromJson(System.String,JsonSettings)">
+      <summary>
+   decodes <paramref name="json" /> into a strongly typed object of type T
+   </summary>
+      <returns>The json.</returns>
+      <param name="json">Json.</param>
+      <param name="settings">Settings.</param>
+      <typeparam name="T">The 1st type parameter.</typeparam>
+    </member>
+    <member name="M:Nez.Persistence.Json.FromJson``1(System.String,JsonSettings)">
+      <summary>
+   decods <paramref name="json" /> into a strongly typed object
+   </summary>
+      <param name="json">
+      </param>
+      <typeparam name="T">
+      </typeparam>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.Persistence.Json.FromJsonOverwrite(System.String,System.Object)">
+      <summary>
+   overwrites any data on <paramref name="item" /> with the data found in the json string
+   </summary>
+      <param name="json">Json.</param>
+      <param name="item">Item.</param>
+    </member>
+    <member name="T:Nez.Persistence.JsonDecoder">
+      <summary>
+   responsible for taking a json string and decoding it into objects, either generic or strongly typed
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.JsonDecoder.FromJson``1(System.String,JsonSettings)">
+      <summary>
+   decodes <paramref name="jsonString" /> into an object of type T
+   </summary>
+      <returns>The json.</returns>
+      <param name="jsonString">Json string.</param>
+      <param name="settings">Settings.</param>
+      <typeparam name="T">The 1st type parameter.</typeparam>
+    </member>
+    <member name="M:Nez.Persistence.JsonDecoder.FromJson(System.String,JsonSettings)">
+      <summary>
+   decodes <paramref name="jsonString" /> into standard system and generic types
+   </summary>
+      <returns>The json.</returns>
+      <param name="jsonString">Json string.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:Nez.Persistence.JsonDecoder.FromJson(System.String,Type,JsonSettings)">
+      <summary>
+   decodes <paramref name="jsonString" /> into an object of type <paramref name="type" /></summary>
+      <returns>The json.</returns>
+      <param name="jsonString">Json string.</param>
+      <param name="type">Type.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:Nez.Persistence.JsonDecoder.FromJsonOverwrite(System.String,System.Object,JsonSettings)">
+      <summary>
+   overwrites the data on <paramref name="obj" /> with the data serialized from JSON. This will only
+   work for custom objects, Dictionarys and Lists.
+   </summary>
+      <param name="jsonString">Json string.</param>
+      <param name="obj">Object.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="T:Nez.Persistence.JsonEncoder">
+      <summary>
+   responsible for serializing an object to JSON
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.TypeNameHandling.None">
+      <summary>
+   Do not include the .NET type name when serializing types
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.TypeNameHandling.Objects">
+      <summary>
+   Include the .NET type name when serializing into a JSON object structure
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.TypeNameHandling.Arrays">
+      <summary>
+   Include the .NET type name when serializing into a JSON array structure
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.TypeNameHandling.All">
+      <summary>
+   Always include the .NET type name when serializing
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.TypeNameHandling.Auto">
+      <summary>
+   Include the .NET type name when the type of the object being serialized is not the same as its declared type
+   </summary>
+    </member>
+    <member name="F:Nez.Persistence.JsonSettings.HandlesReferences">
+      <summary>
+   stub to save the most useful configuration for object graphs
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.INsonEncoder.EncodeKeyValuePair(System.String,System.Object)">
+      <summary>
+   writes a key/value pair. <paramref name="value" /> can any NSON encodeable value.
+   </summary>
+      <param name="key">Key.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="T:Nez.Persistence.NsonObjectFactory`1">
+      <summary>
+   used to override the default NSON object creation for a Type.
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.NsonTypeConverter">
+      <summary>
+   used to override the default NSON writing and augment converting NSON to an object
+   </summary>
+    </member>
+    <member name="T:Nez.Persistence.NsonTypeConverter`1">
+      <summary>
+   These can be used to fully override the reading and writing of NSON for any object type.
+   </summary>
+    </member>
+    <member name="P:Nez.Persistence.NsonTypeConverter.WantsExclusiveWrite">
+      <summary>
+   indicates this converter wants to exclusively write the NSON data. The props/fields will
+   not be encoded.
+   </summary>
+      <value>
+        <c>true</c> if wants exclusive write; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:Nez.Persistence.NsonTypeConverter.CanWrite">
+      <summary>
+   indicates this converter wants to write NSON. Both WantsExclusiveWrite and CanWrite need to be true
+   if this convertoer wants to write the NSON exclusively.
+   </summary>
+      <value>
+        <c>true</c> if can write; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="P:Nez.Persistence.NsonTypeConverter.CanRead">
+      <summary>
+   indicates this converter wants to read NSON. <see cref="M:Nez.Persistence.NsonTypeConverter.OnFoundCustomData(System.Object@,System.String,System.Object)" /> will be called for each
+   key found that does not have a corresponding member field/property. This is the data that would have
+   been writtn in the <see cref="M:Nez.Persistence.NsonTypeConverter.WriteNson(INsonEncoder,System.Object)" /> method.
+   </summary>
+      <value>
+        <c>true</c> if can read; otherwise, <c>false</c>.</value>
+    </member>
+    <member name="M:Nez.Persistence.NsonTypeConverter.CanConvertType(Type)">
+      <summary>
+   indicates this converter can work with Type <paramref name="objectType" /></summary>
+      <returns>
+        <c>true</c>, if convert type was caned, <c>false</c> otherwise.</returns>
+      <param name="objectType">Object type.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonTypeConverter`1.WriteNson(INsonEncoder,`0)">
+      <summary>
+   if CanWrite returns true this will be called. Here is where you encode your object using the <paramref name="encoder" /></summary>
+      <param name="encoder">Encoder.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonTypeConverter`1.OnFoundCustomData(System.Object@,System.String,System.Object)">
+      <summary>
+   we can pass the instance by reference only up until this point, where we cast. For this to work with structs, we
+   have to reassign the new instance to the one passed by reference.
+   </summary>
+      <param name="instance">
+      </param>
+      <param name="key">
+      </param>
+      <param name="value">
+      </param>
+    </member>
+    <member name="M:Nez.Persistence.NsonTypeConverter`1.OnFoundCustomData(`0,System.String,System.Object)">
+      <summary>
+   If CanConvert returns true this will be called anytime a key/value pair that isnt found via
+   reflection is in the NSON
+   </summary>
+      <returns>The to object.</returns>
+      <param name="instance">Instance.</param>
+      <param name="key">Key.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="T:Nez.Persistence.NsonIncludeAttribute">
+      <summary>
+   Mark members that should be included. Public fields and properties are included by default.
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.Nson.ToNson(System.Object,System.Boolean)">
+      <summary>
+   encodes <paramref name="obj" /> to a nson string, pretty printed
+   </summary>
+      <returns>The nson.</returns>
+      <param name="obj">Object.</param>
+      <param name="prettyPrint">If set to <c>true</c> pretty print.</param>
+    </member>
+    <member name="M:Nez.Persistence.Nson.ToNson(System.Object,NsonTypeConverter[])">
+      <summary>
+   encodes <paramref name="obj" /> to a nson string with an optional <see cref="T:Nez.Persistence.NsonTypeConverter" /></summary>
+      <returns>The nson.</returns>
+      <param name="obj">Object.</param>
+      <param name="converters">Converters.</param>
+    </member>
+    <member name="M:Nez.Persistence.Nson.ToNson(System.Object,NsonSettings)">
+      <summary>
+   encodes <paramref name="obj" /> to a nson string
+   </summary>
+      <param name="obj">
+      </param>
+      <param name="options">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.Persistence.Nson.FromNson(System.String,NsonSettings)">
+      <summary>
+   decodes <paramref name="nson" /> into a strongly typed object of type T
+   </summary>
+      <returns>The nson.</returns>
+      <param name="nson">Nson.</param>
+      <param name="settings">Settings.</param>
+      <typeparam name="T">The 1st type parameter.</typeparam>
+    </member>
+    <member name="M:Nez.Persistence.Nson.FromNson``1(System.String,NsonSettings)">
+      <summary>
+   decods <paramref name="nson" /> into a strongly typed object
+   </summary>
+      <param name="nson">
+      </param>
+      <typeparam name="T">
+      </typeparam>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.Persistence.Nson.FromNsonOverwrite(System.String,System.Object)">
+      <summary>
+   overwrites any data on <paramref name="item" /> with the data found in the nson string
+   </summary>
+      <param name="nson">Nson.</param>
+      <param name="item">Item.</param>
+    </member>
+    <member name="T:Nez.Persistence.NsonDecoder">
+      <summary>
+   responsible for taking a nson string and decoding it into objects, either generic or strongly typed
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.NsonDecoder.FromNson``1(System.String,NsonSettings)">
+      <summary>
+   decodes <paramref name="nsonString" /> into an object of type T
+   </summary>
+      <returns>The nson.</returns>
+      <param name="nsonString">Nson string.</param>
+      <param name="settings">Settings.</param>
+      <typeparam name="T">The 1st type parameter.</typeparam>
+    </member>
+    <member name="M:Nez.Persistence.NsonDecoder.FromNson(System.String,NsonSettings)">
+      <summary>
+   decodes <paramref name="nsonString" /> into standard system and generic types
+   </summary>
+      <returns>The nson.</returns>
+      <param name="nsonString">Nson string.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonDecoder.FromNson(System.String,Type,NsonSettings)">
+      <summary>
+   decodes <paramref name="nsonString" /> into an object of type <paramref name="type" /></summary>
+      <returns>The nson.</returns>
+      <param name="nsonString">Nson string.</param>
+      <param name="type">Type.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonDecoder.FromNsonOverwrite(System.String,System.Object,NsonSettings)">
+      <summary>
+   overwrites the data on <paramref name="obj" /> with the data serialized from JSON. This will only
+   work for custom objects, Dictionarys and Lists.
+   </summary>
+      <param name="nsonString">Nson string.</param>
+      <param name="obj">Object.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="T:Nez.Persistence.NsonEncoder">
+      <summary>
+   responsible for serializing an object to JSON
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.NsonEncoder.EncodeValue(System.Object)">
+      <summary>
+   handles writing any arbitrary object type to the JSON string
+   </summary>
+      <param name="value">Value.</param>
+      <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonEncoder.EncodeObject(System.Object)">
+      <summary>
+   encodes an object to the nson stream.
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.NsonEncoder.WriteOptionalReferenceData(System.Object)">
+      <summary>
+   uses the NsonSettings and object details to deal with reference tracking. If a reference was found and written
+   to the JSON stream it will return true and the rest of the object data should not be written.
+   </summary>
+      <param name="value">Value.</param>
+    </member>
+    <member name="M:Nez.Persistence.NsonEncoder.WriteValueDelimiter">
+      <summary>
+   writes a comma when needed. Call this before writing any object/array key-value pairs.
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.NsonEncoder.NsonString">
+      <summary>
+   returns the JSON string and resets the internal state. Do not call any other methods after calling this!
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="F:Nez.Persistence.NsonSettings.HandlesReferences">
+      <summary>
+   stub to save the most useful configuration for object graphs
+   </summary>
+    </member>
+    <member name="M:Nez.Persistence.NsonSettings.GetTypeConverterForType(Type)">
+      <summary>
+   finds and returns the first <see cref="T:Nez.Persistence.NsonTypeConverter" /> found that can convert <paramref name="objectType" /></summary>
+      <returns>The type converter for type.</returns>
+      <param name="objectType">Object type.</param>
+    </member>
+  </members>
+</doc>

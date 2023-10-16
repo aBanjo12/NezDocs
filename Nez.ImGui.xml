@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Nez.ImGui</name>
+  </assembly>
+  <members>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.RegisterDrawCommand(Action)">
+      <summary>
+   registers an Action that will be called and any ImGui drawing can be done in it
+   </summary>
+      <param name="drawCommand">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.UnregisterDrawCommand(Action)">
+      <summary>
+   removes the Action from the draw commands
+   </summary>
+      <param name="drawCommand">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.UnbindTexture(IntPtr)">
+      <summary>
+   Creates a pointer to a texture, which can be passed through ImGui calls such as <see cref="M:ImGuiNET.ImGui.Image(System.IntPtr,System.Numerics.Vector2)" />.
+   That pointer is then used by ImGui to let us know what texture to draw
+   </summary>
+      <param name="textureId">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.BindTexture(Texture2D)">
+      <summary>
+   Removes a previously created texture pointer, releasing its reference and allowing it to be deallocated
+   </summary>
+      <param name="texture">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.StartInspectingEntity(Entity)">
+      <summary>
+   creates an EntityInspector window
+   </summary>
+      <param name="entity">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.StopInspectingEntity(Entity)">
+      <summary>
+   removes the EntityInspector for this Entity
+   </summary>
+      <param name="entity">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiManager.StopInspectingEntity(EntityInspector)">
+      <summary>
+   removes the EntityInspector
+   </summary>
+      <param name="entityInspector">
+      </param>
+    </member>
+    <member name="T:Nez.ImGuiTools.ImGuiRenderer">
+      <summary>
+        <font color="red">Badly formed XML comment.</font>
+      </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiRenderer.RebuildFontAtlas(ImGuiOptions)">
+      <summary>
+   Creates a texture and loads the font data from ImGui. Should be called when the <see cref="T:Microsoft.Xna.Framework.Graphics.GraphicsDevice" /> is initialized but before any rendering is done
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiRenderer.BindTexture(Texture2D)">
+      <summary>
+   Creates a pointer to a texture, which can be passed through ImGui calls such as <see cref="M:ImGuiNET.ImGui.Image(System.IntPtr,System.Numerics.Vector2)" />. That pointer is then used by ImGui to let us know what texture to draw
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiRenderer.UnbindTexture(IntPtr)">
+      <summary>
+   Removes a previously created texture pointer, releasing its reference and allowing it to be deallocated
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiRenderer.BeforeLayout(System.Single)">
+      <summary>
+   Sets up ImGui for a new frame, should be called at frame start
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.ImGuiRenderer.AfterLayout">
+      <summary>
+   Asks ImGui for the generated geometry data and sends it to the graphics pipeline, should be called after the UI is drawn using ImGui.** calls
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.ObjectInspectors.InspectorDelegateAttribute">
+      <summary>
+   adding this to a method on a Component will cause the ImGui ComponentInspector to call the method whenever
+   it is inspecting the Component
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.SceneGraphPanes.PostProcessorsPane">
+      <summary>
+   manages displaying the current PostProcessors in the Scene and provides a means to add PostProcessors
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.SceneGraphPanes.RenderersPane">
+      <summary>
+   manages displaying the current Renderers in the Scene
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector">
+      <summary>
+   subclasses are used to inspect various built-in types. A bit of care has to be taken when we are dealing with any non-value types. Objects
+   can be null and we don't want to inspect a null object. Having a null value for an inspected class when initialize is called means we
+   cant create the AbstractTypeInspectors for the fields of the object since we need an object to wrap the getter/setter with.
+   </summary>
+    </member>
+    <member name="P:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.IsTargetDestroyed">
+      <summary>
+   parent inspectors that also keep a list sub-inspectors can check this to ensure the object the sub-inspectors was inspecting
+   is still around. Of course, child inspectors must be dilgent about setting it when the remove themselves!
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.Initialize">
+      <summary>
+   used to prep the inspector
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.Draw">
+      <summary>
+   used to draw the UI for the Inspector. Calls either drawMutable or drawReadOnly depending on the _isReadOnly bool
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.DrawReadOnly">
+      <summary>
+   default implementation disables the next widget and calls through to drawMutable. If specialy drawing needs to
+   be done (such as a multi-widget setup) this can be overridden.
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.SetStructTarget(System.Object,AbstractTypeInspector,FieldInfo)">
+      <summary>
+   this version will first fetch the struct before getting/setting values on it when invoking the getter/setter
+   </summary>
+      <returns>The struct target.</returns>
+      <param name="target">Target.</param>
+      <param name="structName">Struct name.</param>
+      <param name="field">Field.</param>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.AbstractTypeInspector.SetStructTarget(System.Object,AbstractTypeInspector,PropertyInfo)">
+      <summary>
+   this version will first fetch the struct before getting/setting values on it when invoking the getter/setter
+   </summary>
+      <returns>The struct target.</returns>
+      <param name="target">Target.</param>
+      <param name="structName">Struct name.</param>
+      <param name="field">Field.</param>
+    </member>
+    <member name="T:Nez.ImGuiTools.TypeInspectors.BlendStateInspector">
+      <summary>
+   this is a bit of a hack. The class implements properties that just forward the calls to the BlendState
+   that we are inspecting.
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.TypeInspectors.EntityFieldInspector">
+      <summary>
+   special Inspector that handles Entity references displaying a button that opens the inspector for the Entity
+   </summary>
+    </member>
+    <member name="T:Nez.ImGuiTools.TypeInspectors.SimpleTypeInspector">
+      <summary>
+   handles inspecting a slew of different basic types
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.StructInspector.DrawReadOnly">
+      <summary>
+   we need to override here so that we can keep the header enabled so that it can be opened
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.TypeInspectorUtils.GetInspectableProperties(System.Object)">
+      <summary>
+   fetches all the relevant AbstractTypeInspectors for target including fields, properties and methods.
+   </summary>
+      <param name="target">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.TypeInspectors.TypeInspectorUtils.GetInspectorForType(Type,System.Object,MemberInfo)">
+      <summary>
+   gets an Inspector subclass that can handle valueType. If no default Inspector is available the memberInfo custom attributes
+   will be checked for the CustomInspectorAttribute.
+   </summary>
+      <returns>The inspector for type.</returns>
+      <param name="valueType">Value type.</param>
+      <param name="memberInfo">Member info.</param>
+    </member>
+    <member name="M:Nez.ImGuiTools.EntityInspector.SetWindowFocus">
+      <summary>
+   sets this EntityInspector to be focused the next time it is drawn
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.InspectorCache.GetAllComponentSubclassTypes">
+      <summary>
+   gets all the Component subclasses that have a parameterless constructor
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.InspectorCache.GetAllEffectSubclassTypes">
+      <summary>
+   gets all the Effect subclasses that have a parameterless constructor
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.InspectorCache.GetAllPostProcessorSubclassTypes">
+      <summary>
+   gets all the Effect subclasses that have a parameterless constructor
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="F:Nez.ImGuiTools.SpriteAtlasEditorWindow.PathToSpritePacker">
+      <summary>
+   default location of SpriteAtlasPacker.exe. If you use a non-standard Nez install location set this before using the atlas editor
+   </summary>
+    </member>
+    <member name="F:Nez.ImGuiTools.SpriteAtlasEditorWindow.AtlasExportFolder">
+      <summary>
+   default export path for atlases generated from a folder
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.GetScopeId">
+      <summary>
+   gets a unique id that can be used with ImGui.PushId() to avoid conflicts with type inspectors
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.BeginBorderedGroup">
+      <summary>
+   adds a DrawList command to draw a border around the group
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.LabelButton(System.String,System.String)">
+      <summary>
+   aligns a button and label in the same way LabelText and regular widgets are lined up
+   </summary>
+      <param name="label">
+      </param>
+      <param name="buttonText">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.GetDefaultWidgetHeight">
+      <summary>
+   most widgets heights are calculated using this formula. Some let you specifiy a height though.
+   </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.DisableNextWidget(System.Single)">
+      <summary>
+   draws an invisible button that will cover the next widget rect
+   </summary>
+      <param name="widgetCustomHeight">
+      </param>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.CenteredButton(System.String,System.Single,System.Single)">
+      <summary>
+   draws a button with the width as a percentage of the window contnet region centered.
+   </summary>
+      <param name="percentWidth">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.ShowContextMenuTooltip">
+      <summary>
+   shows a tooltip informing the user they can right click
+   </summary>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.SimpleDialog(System.String,System.String,System.String,System.String)">
+      <summary>
+   displays a simple dialog with some text and a couple buttons. Note that ImGui.OpenPopup( name ) has to be called
+   in the same ID scope as this call.
+   </summary>
+      <param name="name">
+      </param>
+      <param name="message">
+      </param>
+      <param name="okButton">
+      </param>
+      <param name="cxlButton">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.DragScaler(System.String,System.UInt64@,System.Single,System.Int32,System.Int32)">
+      <summary>
+   wraps ImGui.DragScaler and handles all IntPtr conversion
+   </summary>
+      <param name="label">
+      </param>
+      <param name="value">
+      </param>
+      <param name="speed">
+      </param>
+      <param name="min">
+      </param>
+      <param name="max">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.DragScaler(System.String,System.UInt32@,System.Single,System.Int32,System.Int32)">
+      <summary>
+   wraps ImGui.DragScaler and handles all IntPtr conversion
+   </summary>
+      <param name="label">
+      </param>
+      <param name="value">
+      </param>
+      <param name="speed">
+      </param>
+      <param name="min">
+      </param>
+      <param name="max">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.SliderScalar(System.String,System.UInt64@,System.Int32,System.Int32)">
+      <summary>
+   wraps ImGui.SliderScalar and handles all IntPtr conversion
+   </summary>
+      <param name="label">
+      </param>
+      <param name="value">
+      </param>
+      <param name="speed">
+      </param>
+      <param name="min">
+      </param>
+      <param name="max">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Nez.ImGuiTools.NezImGui.SliderScalar(System.String,System.UInt32@,System.Int32,System.Int32)">
+      <summary>
+   wraps ImGui.SliderScalar and handles all IntPtr conversion
+   </summary>
+      <param name="label">
+      </param>
+      <param name="value">
+      </param>
+      <param name="speed">
+      </param>
+      <param name="min">
+      </param>
+      <param name="max">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:Nez.ImGuiTools.NumericsExt">
+      <summary>
+   helpers to convert to/from System.Numberics
+   </summary>
+    </member>
+  </members>
+</doc>
